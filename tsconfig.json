@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2018",                               
+    "lib": ["es5", "es6", "ES2018"],    // Quais recursos das versões do JS serão usadas                          
+    "experimentalDecorators": true,     // Obrigatório pra uso com TypeORM              
+    "emitDecoratorMetadata": true,      // Obrigatório pra uso com TypeORM              
+    "module": "commonjs",                             
+    "moduleResolution": "node",                       
+    "resolveJsonModule": true,                        
+    "allowJs": true,
+    "outDir": "./dist",                 // Nome da pasta onde será gerado o arquivo transpilado do TS para JS              
+    "esModuleInterop": true,                          
+    "forceConsistentCasingInFileNames": true,         
+    "strict": true,                                   
+    "strictPropertyInitialization": false,   // False vai retirar a obrigação de definir o valor dos atributos em um método construc         
+    "noImplicitThis": true,                           
+  },
+  "include": ["src/**/*"], // Faz com que o TS verifique todas as pastas que estão dentro do 'src'
+  "exclude": ["node_modules", "dist"],
+  "ts-node": {
+    "files": true
+  }
+}
