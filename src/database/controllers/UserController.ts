@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { userRepository } from "../repositories/userRepository";
+import bcrypt from "bcrypt";
 
 export class UserController {
   async create(req: Request, res: Response) {
@@ -9,8 +10,10 @@ export class UserController {
       return res.status(400).json({ message: "Os campos login, password e email são obrigatórios!" });
     }
 
+    const cryptedPassword = await bcrypt.hash(password, 4);
+
     try {
-      const newUser = userRepository.create({ login, password, email });
+      const newUser = userRepository.create({ login, password: cryptedPassword, email });
       await userRepository.save(newUser);
 
       return res.status(201).json({ newUser });
