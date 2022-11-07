@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToMany,
@@ -10,7 +11,7 @@ import { User } from "./User";
 
 @Entity()
 export class Profile {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: number;
 
   @Column()
@@ -20,7 +21,13 @@ export class Profile {
   lastName: string;
 
   @Column()
-  email: string;
+  avatar: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @CreateDateColumn()
+  updated_at: Date;
 
   @ManyToOne(() => User, (user) => user.profiles)
   @JoinColumn({ name: "user_fk" })
