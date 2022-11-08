@@ -10,7 +10,7 @@ export class UserController {
       return res.status(400).json({ message: "Os campos login, password e email são obrigatórios!" });
     }
 
-    const cryptedPassword = await bcrypt.hash(password, 4);
+    const cryptedPassword = await bcrypt.hash(password, 8);
 
     try {
       const newUser = userRepository.create({ login, password: cryptedPassword, email });

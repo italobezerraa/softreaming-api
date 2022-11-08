@@ -7,9 +7,9 @@ AppDataSource.initialize().then(() => {
 
   app.use(express.json());
 
-  console.log("Servidor rodando na porta 3333!");
-
   app.use(routes);
 
-  return app.listen(process.env.PORT);
+  return app.listen(process.env.PORT, () => {
+    console.log("Servidor conectado e rodando na porta 3333!");
+  });
 });
