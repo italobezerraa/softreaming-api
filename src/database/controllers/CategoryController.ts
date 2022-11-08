@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { categoryRepository } from "../repositories/categoryRepository";
+import { categoryRepository } from "../repositories";
 
 export class CategoryController {
   async create(req: Request, res: Response) {
