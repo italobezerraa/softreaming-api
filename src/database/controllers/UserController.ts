@@ -5,20 +5,14 @@ import { userRepository } from "../repositories";
 export class UserController {
   async create(req: Request, res: Response) {
     const { login, password, email } = req.body;
+    const checkLogin = await userRepository.findOne({ where: { login: req.body.login } });
+    const checkEmail = await userRepository.findOne({ where: { email: req.body.email } });
 
     if (!login || !password || !email) {
       return res.status(400).json({ message: "Os campos login, password e email são obrigatórios!" });
-    }
-
-    const checkLogin = await userRepository.findOne({ where: { login: req.body.login } });
-
-    if (checkLogin) {
+    } else if (checkLogin) {
       return res.status(400).json({ message: "Esse login já está sendo utilizado!" });
-    }
-
-    const checkEmail = await userRepository.findOne({ where: { email: req.body.email } });
-
-    if (checkEmail) {
+    } else if (checkEmail) {
       return res.status(400).json({ message: "Esse email já está sendo utilizado!" });
     }
 
