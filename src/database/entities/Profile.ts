@@ -1,17 +1,10 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import BaseEntity from "./BaseEntity";
 import { User } from "./User";
 
 @Entity()
-export class Profile {
-  @PrimaryGeneratedColumn("uuid")
+export class Profile extends BaseEntity {
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -22,12 +15,6 @@ export class Profile {
 
   @Column()
   avatar: string;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @CreateDateColumn()
-  updated_at: Date;
 
   @ManyToOne(() => User, (user) => user.profiles)
   @JoinColumn({ name: "user_fk" })

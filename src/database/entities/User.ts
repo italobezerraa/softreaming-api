@@ -1,9 +1,10 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Profile } from "./Profile";
+import BaseEntity from "./BaseEntity";
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn("uuid")
+export class User extends BaseEntity {
+  @PrimaryGeneratedColumn()
   id: string;
 
   @Column()
@@ -14,12 +15,6 @@ export class User {
 
   @Column()
   email: string;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @CreateDateColumn()
-  updated_at: Date;
 
   @OneToMany(() => Profile, (profile) => profile.user)
   profiles: Profile[];

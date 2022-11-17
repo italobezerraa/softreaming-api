@@ -1,15 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import BaseEntity from "./BaseEntity";
 import { Movie } from "./Movie";
 
 @Entity()
-export class Category {
-  @PrimaryGeneratedColumn("uuid")
+export class Category extends BaseEntity {
+  @PrimaryGeneratedColumn()
   id: string;
 
   @Column()
   name: string;
 
-  @ManyToOne(() => Movie, (movie) => movie.categories)
+  @ManyToMany(() => Movie, (movie) => movie.categories)
   @JoinColumn({ name: "movie_fk" })
-  movies: Movie;
+  movies: Movie[];
 }
