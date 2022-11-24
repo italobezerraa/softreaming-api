@@ -4,9 +4,12 @@ import { categoryRepository } from "../repositories";
 export class CategoryController {
   async create(req: Request, res: Response) {
     const { name } = req.body;
+    const checkCategory = await categoryRepository.findOne({ where: { name: req.body.name } });
 
     if (!name) {
       return res.status(400).json({ message: "O campo nome é obrigatório!" });
+    } else if (checkCategory) {
+      return res.status(400).json({ message: "A categoria já foi criada!" });
     }
 
     try {

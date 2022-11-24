@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "./BaseEntity";
 import { User } from "./User";
 
@@ -17,6 +17,5 @@ export class Profile extends BaseEntity {
   avatar: string;
 
   @ManyToOne(() => User, (user) => user.profiles)
-  @JoinColumn({ name: "user_fk" })
   user: User;
 }

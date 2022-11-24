@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "./BaseEntity";
 import { Movie } from "./Movie";
 
@@ -11,6 +11,6 @@ export class Category extends BaseEntity {
   name: string;
 
   @ManyToMany(() => Movie, (movie) => movie.categories)
-  @JoinColumn({ name: "movie_fk" })
+  @JoinTable({ name: "movies_categories" })
   movies: Movie[];
 }
