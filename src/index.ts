@@ -11,6 +11,6 @@ AppDataSource.initialize().then(() => {
 
   return app.listen(process.env.PORT, () => {
     console.log(`Servidor conectado e rodando na porta ${process.env.PORT}!`);
-    console.log("Bora testar! dois tres");
+    console.log("Bora testar! dois tres 4444");
   });
 });
