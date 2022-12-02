@@ -8,7 +8,7 @@ const routes = Router();
 // Category Routes
 routes.post("/category", new CategoryController().create);
 routes.get("/category", new CategoryController().list);
-routes.put("/category", new CategoryController().update);
+routes.put("/category/:id", new CategoryController().update);
 routes.delete("/category/:id", new CategoryController().delete);
 
 // User Routes
