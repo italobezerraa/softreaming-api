@@ -1,3 +1,4 @@
+import { hasSubscribers } from "diagnostics_channel";
 import { Request, Response } from "express";
 import { categoryRepository } from "../repositories";
 
@@ -21,6 +22,29 @@ export class CategoryController {
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+
+  async list(req: Request, res: Response) {
+    const listCategory = await categoryRepository.find();
+    return res.status(200).json(listCategory);
+  }
+
+  async update(req: Request, res: Response) {
+    return res.json({ message: "Atualizar Category!" });
+  }
+
+  async delete(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const checkIdCategory = await categoryRepository.findOne({ where: { id: id } });
+    console.log(checkIdCategory);
+
+    if (!checkIdCategory) {
+      return res.json({ message: "Error: Categoria não existe!" });
+    } else {
+      await categoryRepository.softRemove(checkIdCategory);
+      return res.json({ messange: "Feito!" });
     }
   }
 }
