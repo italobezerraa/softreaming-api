@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { userRepository } from "../repositories";
+import { BadRequestError } from "../../helpers/api-erros";
 
 export class UserController {
   async create(req: Request, res: Response) {
@@ -9,23 +10,18 @@ export class UserController {
     const checkEmail = await userRepository.findOne({ where: { email: req.body.email } });
 
     if (!login || !password || !email) {
-      return res.status(400).json({ message: "Os campos login, password e email são obrigatórios!" });
+      throw new BadRequestError("Os campos login, password e email são obrigatórios!");
     } else if (checkLogin) {
-      return res.status(400).json({ message: "Esse login já está sendo utilizado!" });
+      throw new BadRequestError("Esse login já está sendo utilizado!");
     } else if (checkEmail) {
-      return res.status(400).json({ message: "Esse email já está sendo utilizado!" });
+      throw new BadRequestError("Esse email já está sendo utilizado!");
     }
 
     const cryptedPassword = await bcrypt.hash(password, 8);
 
-    try {
-      const newUser = userRepository.create({ login, password: cryptedPassword, email });
-      await userRepository.save(newUser);
+    const newUser = userRepository.create({ login, password: cryptedPassword, email });
+    await userRepository.save(newUser);
 
-      return res.status(201).json({ newUser });
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({ message: "Internal Server Error" });
-    }
+    return res.status(201).json({ newUser });
   }
 }
