@@ -4,10 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { BadRequestError, UnauthorizedError } from "../../helpers/api-erros";
 
-type JwtPayload = {
-  id: number;
-};
-
 export class LoginController {
   async login(req: Request, res: Response) {
     const { login, password } = req.body;
