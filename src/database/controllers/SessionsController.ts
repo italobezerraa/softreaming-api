@@ -2,10 +2,11 @@ import { Request, Response } from "express-serve-static-core";
 import { userRepository } from "../repositories";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { BadRequestError, UnauthorizedError } from "../../helpers/api-erros";
+import { BadRequestError } from "../../helpers/api-erros";
+import authConfig from "../configs/auth";
 
-export class LoginController {
-  async login(req: Request, res: Response) {
+export class SessionsController {
+  async create(req: Request, res: Response) {
     const { login, password } = req.body;
 
     const checkLogin = await userRepository.findOneBy({ login });
@@ -20,13 +21,21 @@ export class LoginController {
       throw new BadRequestError("E-mail ou senha inválidos!");
     }
 
-    const token = jwt.sign({ id: checkLogin.id }, process.env.JWT_PASS ?? "", { expiresIn: "8h" });
+    const { secret, expiresIn } = authConfig.jwt;
+
+    const token = jwt.sign({ id: checkLogin.id }, secret, {
+      expiresIn,
+    });
+
+    // const token = jwt.sign({ id: checkLogin.id }, process.env.JWT_PASS ?? "", { expiresIn: "8h" });
 
     const { password: _, ...userLogin } = checkLogin;
 
-    return res.json({
-      user: userLogin,
-      token: token,
-    });
+    // return res.json({
+    //   user: userLogin,
+    //   token: token,
+    // });
+
+    return res.json({ userLogin, token });
   }
 }
