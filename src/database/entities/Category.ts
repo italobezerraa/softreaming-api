@@ -11,6 +11,5 @@ export class Category extends BaseEntity {
   name: string;
 
   @ManyToMany(() => Movie, (movie) => movie.categories)
-  @JoinTable({ name: "movies_categories" })
   movies: Movie[];
 }

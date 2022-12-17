@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "./BaseEntity";
 import { Category } from "./Category";
 
@@ -17,5 +17,6 @@ export class Movie extends BaseEntity {
   yearRelease: number;
 
   @ManyToMany(() => Category, (category) => category.movies)
+  @JoinTable({ name: "movies_categories" })
   categories: Category[];
 }
