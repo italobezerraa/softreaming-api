@@ -17,3 +17,6 @@ Esse projeto está sendo desenvolvido com as seguintes tecnologias:
 - Docker
 - PostgreSQL
 - TypeORM
+- NodeJS
+- JWT
+- Bcrypt
