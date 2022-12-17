@@ -20,5 +20,8 @@ routes.post("/login", new SessionsController().create);
 
 // Movie Routes
 routes.post("/movie", new MovieController().create);
+routes.get("/movie", new MovieController().list);
+routes.patch("/movie/:id", new MovieController().update);
+routes.delete("/movie/:id", new MovieController().delete);
 
 export default routes;
