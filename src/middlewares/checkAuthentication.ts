@@ -3,7 +3,7 @@ import { verify } from "jsonwebtoken";
 import authConfig from "../database/configs/auth";
 import { UnauthorizedError } from "../helpers/api-erros";
 
-export function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
+export function checkAuthentication(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {

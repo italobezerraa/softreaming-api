@@ -1,8 +1,8 @@
-import { hasSubscribers } from "diagnostics_channel";
 import { Request, Response } from "express";
+import { In } from "typeorm";
 import { categoryRepository } from "../repositories";
 
-export class CategoryController {
+class CategoryController {
   async create(req: Request, res: Response) {
     const { name } = req.body;
     const checkCategory = await categoryRepository.findOne({ where: { name: req.body.name } });
@@ -57,4 +57,11 @@ export class CategoryController {
       return res.json({ message: "A categoria foi removida!" });
     }
   }
+
+  async listByIds(ids: number[]) {
+    const categories = categoryRepository.find({ where: { id: In(ids) } });
+    return categories;
+  }
 }
+
+export default new CategoryController();

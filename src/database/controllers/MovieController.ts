@@ -1,19 +1,26 @@
 import { Request, Response } from "express";
 import { movieRepository } from "../repositories";
+import CategoryController from "./CategoryController";
 
-export class MovieController {
+class MovieController {
   async create(req: Request, res: Response) {
-    const { name, description, yearRelease } = req.body;
+    const { name, description, yearRelease, categories } = req.body;
     const checkMovie = await movieRepository.findOne({ where: { name: req.body.name } });
+    const checkCategories = await CategoryController.listByIds(categories);
 
-    if (!name || !description || !yearRelease) {
+    if (!name || !description || !yearRelease || !checkCategories) {
       return res.status(400).json({ message: "Campos obrigatórios estão faltando!" });
     } else if (checkMovie) {
       return res.status(400).json({ message: "O filme já foi criado!" });
     }
 
     try {
-      const newMovie = movieRepository.create({ name, description, yearRelease });
+      const newMovie = movieRepository.create({
+        name,
+        description,
+        yearRelease,
+        categories: checkCategories,
+      });
 
       await movieRepository.save(newMovie);
 
@@ -25,7 +32,9 @@ export class MovieController {
   }
 
   async list(req: Request, res: Response) {
-    const listMovie = await movieRepository.find();
+    const listMovie = await movieRepository.find({
+      relations: ["categories"],
+    });
     return res.status(200).json(listMovie);
   }
 
@@ -60,3 +69,5 @@ export class MovieController {
     }
   }
 }
+
+export default new MovieController();
