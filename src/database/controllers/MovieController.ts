@@ -4,11 +4,14 @@ import CategoryController from "./CategoryController";
 
 class MovieController {
   async create(req: Request, res: Response) {
-    const { name, description, yearRelease, categories } = req.body;
+    let { name, description, yearRelease, categories } = req.body;
     const checkMovie = await movieRepository.findOne({ where: { name: req.body.name } });
+
+    if (!categories) categories = [12];
+
     const checkCategories = await CategoryController.listByIds(categories);
 
-    if (!name || !description || !yearRelease || !checkCategories) {
+    if (!name || !description || !yearRelease) {
       return res.status(400).json({ message: "Campos obrigatórios estão faltando!" });
     } else if (checkMovie) {
       return res.status(400).json({ message: "O filme já foi criado!" });
@@ -35,6 +38,7 @@ class MovieController {
     const listMovie = await movieRepository.find({
       relations: ["categories"],
     });
+
     return res.status(200).json(listMovie);
   }
 
