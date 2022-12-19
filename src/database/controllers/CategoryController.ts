@@ -25,8 +25,22 @@ class CategoryController {
     }
   }
 
-  async list(req: Request, res: Response) {
+  async listAll(req: Request, res: Response) {
     const listCategory = await categoryRepository.find();
+
+    const filtredCategoryList = listCategory.map(({ id, name }) => ({ id, name }));
+
+    return res.status(200).json(filtredCategoryList);
+  }
+
+  async listByOne(req: Request, res: Response) {
+    const { id } = req.params;
+    const listCategory = await categoryRepository.findOne({ where: { id: id } });
+
+    if (!listCategory) {
+      return res.status(400).json({ message: "Categoria não encontrada!" });
+    }
+
     return res.status(200).json(listCategory);
   }
 
@@ -58,10 +72,29 @@ class CategoryController {
     }
   }
 
+  async moviesRequest(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const checkIdCategory = await categoryRepository.findOne({ where: { id: id }, relations: ["movies"] });
+
+    if (!checkIdCategory) {
+      return res.json({ message: "Categoria não encontrada!" });
+    }
+
+    const { created_at, updated_at, deleted_at, ...category } = checkIdCategory;
+
+    return res.json(category);
+  }
+
   async listByIds(ids: number[]) {
     const categories = categoryRepository.find({ where: { id: In(ids) } });
     return categories;
   }
+
+  // async getById(id: string) {
+  //   const category = categoryRepository.findOne({ where: { id }, relations: ["movies"] });
+  //   return category;
+  // }
 }
 
 export default new CategoryController();

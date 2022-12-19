@@ -34,8 +34,40 @@ class MovieController {
     }
   }
 
-  async list(req: Request, res: Response) {
-    const listMovie = await movieRepository.find({
+  async listAll(req: Request, res: Response) {
+    // const listMovie = await movieRepository.find({
+    //   relations: ["categories"],
+    // });
+
+    const movies = await movieRepository
+      .createQueryBuilder("movies")
+      .leftJoinAndSelect("movies.categories", "categories")
+      .select([
+        "movies.id",
+        "movies.name",
+        "movies.description",
+        "movies.yearRelease",
+        "categories.id",
+        "categories.name",
+      ])
+      .getMany();
+
+    // const filtredMovieList = listMovie.map(({ id, name, description, yearRelease, categories }) => ({
+    //   id,
+    //   name,
+    //   description,
+    //   yearRelease,
+    //   categories,
+    // }));
+
+    return res.status(200).json(movies);
+  }
+
+  async listByOne(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const listMovie = await movieRepository.findOne({
+      where: { id: id },
       relations: ["categories"],
     });
 
@@ -44,9 +76,10 @@ class MovieController {
 
   async update(req: Request, res: Response) {
     const { id } = req.params;
-    const { name, description, yearRelease } = req.body;
+    const { name, description, yearRelease, categories } = req.body;
 
     const updateMovie = await movieRepository.findOne({ where: { id: id } });
+    const checkCategories = await CategoryController.listByIds(categories);
 
     if (!updateMovie) {
       return res.status(400).json({ message: "Filme não encontrado!" });
@@ -55,6 +88,7 @@ class MovieController {
     if (name) updateMovie.name = name;
     if (description) updateMovie.description = description;
     if (yearRelease) updateMovie.yearRelease = yearRelease;
+    if (categories) updateMovie.categories = checkCategories;
 
     movieRepository.save(updateMovie);
     return res.status(200).json({ message: "Filme atualizado!" });

@@ -8,9 +8,12 @@ const routes = Router();
 
 // Category Routes
 routes.post("/category", CategoryController.create);
-routes.get("/category", CategoryController.list);
+routes.get("/category", CategoryController.listAll);
+routes.get("/category/:id", CategoryController.listByOne);
 routes.put("/category/:id", CategoryController.update);
 routes.delete("/category/:id", CategoryController.delete);
+
+routes.get("/category/:id/movies", CategoryController.moviesRequest);
 
 // User Routes
 routes.post("/user", new UserController().create);
@@ -20,7 +23,8 @@ routes.post("/login", new SessionsController().create);
 
 // Movie Routes
 routes.post("/movie", MovieController.create);
-routes.get("/movie", MovieController.list);
+routes.get("/movie", MovieController.listAll);
+routes.get("/movie/:id", MovieController.listByOne);
 routes.patch("/movie/:id", MovieController.update);
 routes.delete("/movie/:id", MovieController.delete);
 
