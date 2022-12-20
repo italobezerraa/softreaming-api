@@ -35,30 +35,18 @@ class MovieController {
   }
 
   async listAll(req: Request, res: Response) {
-    // const listMovie = await movieRepository.find({
-    //   relations: ["categories"],
-    // });
-
     const movies = await movieRepository
-      .createQueryBuilder("movies")
-      .leftJoinAndSelect("movies.categories", "categories")
+      .createQueryBuilder("movie")
+      .leftJoinAndSelect("movie.categories", "categories")
       .select([
-        "movies.id",
-        "movies.name",
-        "movies.description",
-        "movies.yearRelease",
+        "movie.id",
+        "movie.name",
+        "movie.description",
+        "movie.yearRelease",
         "categories.id",
         "categories.name",
       ])
       .getMany();
-
-    // const filtredMovieList = listMovie.map(({ id, name, description, yearRelease, categories }) => ({
-    //   id,
-    //   name,
-    //   description,
-    //   yearRelease,
-    //   categories,
-    // }));
 
     return res.status(200).json(movies);
   }

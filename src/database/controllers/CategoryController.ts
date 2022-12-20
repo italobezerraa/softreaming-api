@@ -72,29 +72,30 @@ class CategoryController {
     }
   }
 
-  async moviesRequest(req: Request, res: Response) {
+  async moviesRequestByCategory(req: Request, res: Response) {
     const { id } = req.params;
 
-    const checkIdCategory = await categoryRepository.findOne({ where: { id: id }, relations: ["movies"] });
+    const listOfMoviesByCategory = await categoryRepository
+      .createQueryBuilder("category")
+      .leftJoinAndSelect("category.movies", "movies")
+      .select([
+        "category.id",
+        "category.name",
+        "movies.id",
+        "movies.name",
+        "movies.description",
+        "movies.yearRelease",
+      ])
+      .where("category.id = :id", { id: id })
+      .getMany();
 
-    if (!checkIdCategory) {
-      return res.json({ message: "Categoria não encontrada!" });
-    }
-
-    const { created_at, updated_at, deleted_at, ...category } = checkIdCategory;
-
-    return res.json(category);
+    return res.json(listOfMoviesByCategory);
   }
 
   async listByIds(ids: number[]) {
     const categories = categoryRepository.find({ where: { id: In(ids) } });
     return categories;
   }
-
-  // async getById(id: string) {
-  //   const category = categoryRepository.findOne({ where: { id }, relations: ["movies"] });
-  //   return category;
-  // }
 }
 
 export default new CategoryController();

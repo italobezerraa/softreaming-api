@@ -13,7 +13,7 @@ routes.get("/category/:id", CategoryController.listByOne);
 routes.put("/category/:id", CategoryController.update);
 routes.delete("/category/:id", CategoryController.delete);
 
-routes.get("/category/:id/movies", CategoryController.moviesRequest);
+routes.get("/category/:id/movies", CategoryController.moviesRequestByCategory);
 
 // User Routes
 routes.post("/user", new UserController().create);
