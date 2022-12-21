@@ -16,6 +16,9 @@ export class User extends BaseEntity {
   @Column()
   email: string;
 
+  @Column({ default: false })
+  isSuperUser: boolean;
+
   @OneToMany(() => Profile, (profile) => profile.user)
   profiles: Profile[];
 }

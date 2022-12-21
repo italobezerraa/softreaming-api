@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { BadRequestError } from "../../helpers/api-erros";
 import authConfig from "../configs/auth";
 
-export class SessionsController {
+class SessionsController {
   async create(req: Request, res: Response) {
     const { login, password } = req.body;
 
@@ -23,9 +23,7 @@ export class SessionsController {
 
     const { secret, expiresIn } = authConfig.jwt;
 
-    const token = jwt.sign({ id: checkLogin.id }, secret, {
-      expiresIn,
-    });
+    const token = jwt.sign({ id: checkLogin.id }, secret, { expiresIn });
 
     // const token = jwt.sign({ id: checkLogin.id }, process.env.JWT_PASS ?? "", { expiresIn: "8h" });
 
@@ -39,3 +37,5 @@ export class SessionsController {
     return res.json({ userLogin, token });
   }
 }
+
+export default new SessionsController();

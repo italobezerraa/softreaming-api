@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { userRepository } from "../repositories";
 import { BadRequestError } from "../../helpers/api-erros";
+import { userIdRequest } from "../../interfaces/interfaces";
 
-export class UserController {
+class UserController {
   async create(req: Request, res: Response) {
     const { login, password, email } = req.body;
     const checkLogin = await userRepository.findOneBy({ login });
@@ -26,4 +27,59 @@ export class UserController {
 
     return res.status(201).json({ user });
   }
+
+  async listAll(req: Request, res: Response) {
+    const user = await userRepository.findOne({ where: { id: req.userId } });
+
+    if (!user) {
+      return res.status(401).json({ message: "Usuário não não encontrado!" });
+    }
+
+    if (user.isSuperUser === true) {
+      const listUsers = await userRepository.find();
+
+      const filtredUsers = listUsers.map(({ id, login }) => ({ id, login }));
+
+      return res.status(200).json(filtredUsers);
+    } else {
+      return res.status(401).json({ message: "Usuário não tem permissão!" });
+    }
+  }
+
+  async update(req: Request, res: Response) {
+    const { password, email } = req.body;
+
+    const userId = req.userId;
+
+    const user = await userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      throw new BadRequestError("Usuário não encontrado!");
+    }
+
+    if (password) {
+      const cryptedPassword = await bcrypt.hash(password, 10);
+      user.password = cryptedPassword;
+    }
+
+    if (email) user.email = email;
+
+    userRepository.save(user);
+    return res.status(200).json({ message: "Usuário atualizado!" });
+  }
+
+  async delete(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const checkIdUser = await userRepository.findOne({ where: { id: id } });
+
+    if (!checkIdUser) {
+      return res.json({ message: "Usuário não encontrado!" });
+    } else {
+      await userRepository.softRemove(checkIdUser);
+      return res.json({ message: "O usuário foi removido com sucesso!" });
+    }
+  }
 }
+
+export default new UserController();
