@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { userRepository } from "../repositories";
 import { BadRequestError } from "../../helpers/api-erros";
-import { userIdRequest } from "../../interfaces/interfaces";
 
 class UserController {
   async create(req: Request, res: Response) {
@@ -46,6 +45,25 @@ class UserController {
     }
   }
 
+  async listByOne(req: Request, res: Response) {
+    const { id } = req.params;
+    const userId = req.userId;
+
+    const user = await userRepository.findOne({ where: { id: userId } });
+
+    if (user !== null && user.isSuperUser === true) {
+      const listUser = await userRepository.findOne({ where: { id: id }, relations: ["profiles"] });
+
+      if (!listUser) {
+        return res.status(400).json({ message: "Usuário não encontrado!" });
+      } else {
+        return res.status(200).json(listUser);
+      }
+    } else {
+      return res.status(400).json({ message: "Usuário não tem pemissão para realizar essa operação!" });
+    }
+  }
+
   async update(req: Request, res: Response) {
     const { password, email } = req.body;
 
@@ -70,14 +88,25 @@ class UserController {
 
   async delete(req: Request, res: Response) {
     const { id } = req.params;
+    const userId = req.userId;
+
+    const user = await userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      throw new BadRequestError("Usuário não encontrado!");
+    }
 
     const checkIdUser = await userRepository.findOne({ where: { id: id } });
 
     if (!checkIdUser) {
       return res.json({ message: "Usuário não encontrado!" });
-    } else {
+    }
+
+    if (user.isSuperUser === true) {
       await userRepository.softRemove(checkIdUser);
       return res.json({ message: "O usuário foi removido com sucesso!" });
+    } else {
+      return res.json({ message: "Usuário não tem pemissão para realizar essa operação!" });
     }
   }
 }

@@ -28,9 +28,6 @@ export function AuthMiddleware(req: Request, res: Response, next: NextFunction) 
     const { id } = validToken as TokenPayload;
 
     req.userId = id;
-    // req.user = {
-    //   id: Number(user_id),
-    // };
 
     return next();
   } catch (error) {

@@ -14,7 +14,7 @@ export class Profile extends BaseEntity {
   lastName: string;
 
   @Column()
-  avatar: string;
+  age: number;
 
   @ManyToOne(() => User, (user) => user.profiles)
   user: User;

@@ -25,14 +25,7 @@ class SessionsController {
 
     const token = jwt.sign({ id: checkLogin.id }, secret, { expiresIn });
 
-    // const token = jwt.sign({ id: checkLogin.id }, process.env.JWT_PASS ?? "", { expiresIn: "8h" });
-
     const { password: _, ...userLogin } = checkLogin;
-
-    // return res.json({
-    //   user: userLogin,
-    //   token: token,
-    // });
 
     return res.json({ userLogin, token });
   }
