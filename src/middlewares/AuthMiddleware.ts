@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import authConfig from "../database/configs/auth";
-import { UnauthorizedError } from "../helpers/api-erros";
 
 type TokenPayload = {
   id: string;
@@ -13,13 +12,13 @@ export function AuthMiddleware(req: Request, res: Response, next: NextFunction) 
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    throw new UnauthorizedError("JWT Token não informado ou não existe!");
+    return res.status(201).json("JWT Token não informado ou não existe!");
   }
 
   const [, token] = authHeader.split(" ");
 
   if (!token) {
-    throw new UnauthorizedError("JWT Token não informado!");
+    return res.status(201).json("JWT Token não informado!");
   }
 
   try {
@@ -31,6 +30,6 @@ export function AuthMiddleware(req: Request, res: Response, next: NextFunction) 
 
     return next();
   } catch (error) {
-    throw new UnauthorizedError("JWT Token inválido!");
+    return res.status(201).json("JWT Token inválido!");
   }
 }

@@ -54,7 +54,9 @@ class ProfileController {
     return res.status(200).json(profiles);
   }
 
-  async update() {}
+  async update(req: Request, res: Response) {
+    const { id } = req.params;
+  }
 
   async delete(req: Request, res: Response) {
     const { id } = req.params;

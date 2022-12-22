@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { userRepository } from "../repositories";
-import { BadRequestError } from "../../helpers/api-erros";
 
 class UserController {
   async create(req: Request, res: Response) {
@@ -10,11 +9,11 @@ class UserController {
     const checkEmail = await userRepository.findOneBy({ email });
 
     if (!login || !password || !email) {
-      throw new BadRequestError("Os campos login, password e email são obrigatórios!");
+      return res.status(201).json("Os campos login, password e email são obrigatórios!");
     } else if (checkLogin) {
-      throw new BadRequestError("Esse login já está sendo utilizado!");
+      return res.status(201).json("Esse login já está sendo utilizado!");
     } else if (checkEmail) {
-      throw new BadRequestError("Esse email já está sendo utilizado!");
+      return res.status(201).json("Esse email já está sendo utilizado!");
     }
 
     const cryptedPassword = await bcrypt.hash(password, 10);
@@ -72,7 +71,7 @@ class UserController {
     const user = await userRepository.findOne({ where: { id: userId } });
 
     if (!user) {
-      throw new BadRequestError("Usuário não encontrado!");
+      return res.status(201).json("Usuário não encontrado!");
     }
 
     if (password) {
@@ -93,7 +92,7 @@ class UserController {
     const user = await userRepository.findOne({ where: { id: userId } });
 
     if (!user) {
-      throw new BadRequestError("Usuário não encontrado!");
+      return res.status(201).json("Usuário não encontrado!");
     }
 
     const checkIdUser = await userRepository.findOne({ where: { id: id } });

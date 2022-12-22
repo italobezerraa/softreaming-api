@@ -2,7 +2,6 @@ import { Request, Response } from "express-serve-static-core";
 import { userRepository } from "../repositories";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { BadRequestError } from "../../helpers/api-erros";
 import authConfig from "../configs/auth";
 
 class SessionsController {
@@ -12,13 +11,13 @@ class SessionsController {
     const checkLogin = await userRepository.findOneBy({ login });
 
     if (!checkLogin) {
-      throw new BadRequestError("E-mail ou senha inválidos!");
+      return res.status(201).json("E-mail ou senha inválidos!");
     }
 
     const checkPassword = await bcrypt.compare(password, checkLogin.password);
 
     if (!checkPassword) {
-      throw new BadRequestError("E-mail ou senha inválidos!");
+      return res.status(201).json("E-mail ou senha inválidos!");
     }
 
     const { secret, expiresIn } = authConfig.jwt;
