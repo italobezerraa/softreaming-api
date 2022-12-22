@@ -37,6 +37,7 @@ routes.delete("/movie/:id", MovieController.delete);
 // Profile Routes
 routes.post("/profile", AuthMiddleware, ProfileController.create);
 routes.get("/profile", AuthMiddleware, ProfileController.listProfilesByUser);
-routes.get("/profile/:id", AuthMiddleware, ProfileController.update);
+routes.patch("/profile/:id", AuthMiddleware, ProfileController.update);
+routes.delete("/profile/:id", AuthMiddleware, ProfileController.delete);
 
 export default routes;
