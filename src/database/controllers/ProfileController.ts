@@ -56,6 +56,32 @@ class ProfileController {
 
   async update(req: Request, res: Response) {
     const { id } = req.params;
+    const { firstName, lastName, age } = req.body;
+    const userId = req.userId;
+
+    const user = await userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      return res.status(404).json({ message: "Profile não encontrado!" });
+    }
+
+    const profile = await profileRepository
+      .createQueryBuilder("profile")
+      .leftJoinAndSelect("profile.user", "user")
+      .where("profile.id = :id", { id: Number(id) })
+      .andWhere("user.id = :userId", { userId: userId })
+      .getOne();
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile não encontrado!" });
+    }
+
+    if (firstName) profile.firstName = firstName;
+    if (lastName) profile.lastName = lastName;
+    if (age) profile.age = age;
+
+    profileRepository.save(profile);
+    return res.status(200).json({ message: "Profile atualizado com sucesso!" });
   }
 
   async delete(req: Request, res: Response) {
