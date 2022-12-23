@@ -81,7 +81,7 @@ class UserController {
 
     if (email) user.email = email;
 
-    userRepository.save(user);
+    await userRepository.save(user);
     return res.status(200).json({ message: "Usuário atualizado!" });
   }
 
