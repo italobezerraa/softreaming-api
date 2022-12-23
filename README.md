@@ -1,9 +1,5 @@
 <h1 align="center"> softreaming-api </h1>
 
-<p align="center">
-Projeto em desenvolvimento. 
-</p>
-
 ## 📑 Sobre o projeto
 
 Este projeto consiste em uma API de gerenciamento de filmes e usuários. Os usuários da aplicação podem fazer um cadastro, criar até três perfis pessoais e alterar ou excluir esses perfis a qualquer momento. Cada perfil contém informações como nome, sobrenome e idade.
