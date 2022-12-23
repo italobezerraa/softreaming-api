@@ -103,7 +103,7 @@ class UserController {
 
     if (user.isSuperUser === true) {
       await userRepository.softRemove(checkIdUser);
-      return res.json({ message: "O usuário foi removido com sucesso!" });
+      return res.json({ message: "O usuário foi removido com sucesso!", user: user });
     } else {
       return res.json({ message: "Usuário não tem pemissão para realizar essa operação!" });
     }
