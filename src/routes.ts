@@ -15,7 +15,7 @@ routes.get("/category/:id", AuthMiddleware, CategoryController.listByOne);
 routes.put("/category/:id", AuthMiddleware, CategoryController.update);
 routes.delete("/category/:id", AuthMiddleware, CategoryController.delete);
 
-routes.get("/category/movies/:id", AuthMiddleware, CategoryController.moviesRequestByCategory);
+routes.get("/category/:id/movies", AuthMiddleware, CategoryController.moviesRequestByCategory);
 
 // User Routes
 routes.post("/user", UserController.create);

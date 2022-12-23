@@ -38,7 +38,7 @@ Esse projeto está sendo desenvolvido com as seguintes tecnologias:
 $ git clone https://github.com/italobezerraa/softreaming-api
 ```
 
-**Siga o passo a passo abaixo**
+**Com o código aberto no VCODE siga o passo a passo abaixo**
 
 ```bash
 # Instalar as dependências

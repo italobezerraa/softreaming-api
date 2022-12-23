@@ -48,11 +48,11 @@ class MovieController {
       const user = await userRepository.findOne({ where: { id: userId } });
 
       if (!user) {
-        return res.status(400).json({ message: "Usuário não não encontrado!" });
+        return res.status(404).json({ message: "Usuário não foi encontrado!" });
       }
 
       if (user.isSuperUser === false) {
-        return res.status(401).json({ message: "Usuário não tem permissão!" });
+        return res.status(401).json({ message: "O usuário não tem permissão para fazer essa operação!" });
       }
       const movies = await movieRepository
         .createQueryBuilder("movie")
@@ -82,11 +82,11 @@ class MovieController {
       const user = await userRepository.findOne({ where: { id: userId } });
 
       if (!user) {
-        return res.status(400).json({ message: "Usuário não não encontrado!" });
+        return res.status(404).json({ message: "Usuário não foi encontrado!" });
       }
 
       if (user.isSuperUser === false) {
-        return res.status(401).json({ message: "Usuário não tem permissão!" });
+        return res.status(401).json({ message: "O usuário não tem permissão para fazer essa operação!" });
       }
 
       const listMovie = await movieRepository.findOne({
@@ -110,18 +110,18 @@ class MovieController {
       const user = await userRepository.findOne({ where: { id: userId } });
 
       if (!user) {
-        return res.status(400).json({ message: "Usuário não não encontrado!" });
+        return res.status(404).json({ message: "Usuário não não encontrado!" });
       }
 
       if (user.isSuperUser === false) {
-        return res.status(401).json({ message: "Usuário não tem permissão!" });
+        return res.status(401).json({ message: "O usuário não tem permissão para fazer essa operação!" });
       }
 
       const updateMovie = await movieRepository.findOne({ where: { id: id } });
       const checkCategories = await CategoryController.listByIds(categories);
 
       if (!updateMovie) {
-        return res.status(400).json({ message: "Filme não encontrado!" });
+        return res.status(404).json({ message: "Filme não foi encontrado!" });
       }
 
       if (name) updateMovie.name = name;
@@ -145,20 +145,20 @@ class MovieController {
       const user = await userRepository.findOne({ where: { id: userId } });
 
       if (!user) {
-        return res.status(400).json({ message: "Usuário não não encontrado!" });
+        return res.status(404).json({ message: "Usuário não foi encontrado!" });
       }
 
       if (user.isSuperUser === false) {
-        return res.status(401).json({ message: "Usuário não tem permissão!" });
+        return res.status(401).json({ message: "O usuário não tem permissão para fazer essa operação!" });
       }
 
       const checkIdMovie = await movieRepository.findOne({ where: { id: id } });
 
       if (!checkIdMovie) {
-        return res.json({ message: "Error: Filme não existe!" });
+        return res.status(404).json({ message: "Filme não foi encontrado!" });
       } else {
         await movieRepository.softRemove(checkIdMovie);
-        return res.json({ message: "O filme foi removido!" });
+        return res.status(200).json({ message: "O filme foi removido!" });
       }
     } catch (error) {
       console.log(error);

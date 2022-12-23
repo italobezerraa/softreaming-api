@@ -6,8 +6,8 @@ class CategoryController {
   async create(req: Request, res: Response) {
     try {
       const userId = req.userId;
-      console.log(userId);
       const { name } = req.body;
+
       const checkCategory = await categoryRepository.findOne({ where: { name: req.body.name } });
       const user = await userRepository.findOne({ where: { id: userId } });
 
@@ -39,7 +39,6 @@ class CategoryController {
   async listAll(req: Request, res: Response) {
     try {
       const userId = req.userId;
-      console.log(userId);
 
       const user = await userRepository.findOne({ where: { id: userId } });
 
@@ -61,7 +60,7 @@ class CategoryController {
   async listByOne(req: Request, res: Response) {
     try {
       const userId = req.userId;
-      console.log(userId);
+
       const { id } = req.params;
 
       const user = await userRepository.findOne({ where: { id: userId } });
@@ -73,7 +72,7 @@ class CategoryController {
       const listCategory = await categoryRepository.findOne({ where: { id: id } });
 
       if (!listCategory) {
-        return res.status(400).json({ message: "Categoria não encontrada!" });
+        return res.status(404).json({ message: "Categoria não encontrada!" });
       }
 
       return res.status(200).json(listCategory);
@@ -98,7 +97,7 @@ class CategoryController {
       }
 
       if (!updateCategory) {
-        return res.status(400).json({ message: "Categoria não encontrada!" });
+        return res.status(404).json({ message: "Categoria não encontrada!" });
       } else {
         updateCategory.name = name;
         categoryRepository.save(updateCategory);
@@ -124,10 +123,10 @@ class CategoryController {
       }
 
       if (!checkIdCategory) {
-        return res.json({ message: "Error: Categoria não existe!" });
+        return res.status(404).json({ message: "Categoria não encontrada!" });
       } else {
         await categoryRepository.softRemove(checkIdCategory);
-        return res.json({ message: "A categoria foi removida!" });
+        return res.status(200).json({ message: "A categoria foi removida!" });
       }
     } catch (error) {
       console.log(error);
@@ -143,7 +142,7 @@ class CategoryController {
       const user = await userRepository.findOne({ where: { id: userId } });
 
       if (user !== null && user.isSuperUser === false) {
-        return res.status(401).json({ message: "O usuário não tem permissão para fazer essa operação!", user: user });
+        return res.status(401).json({ message: "O usuário não tem permissão para fazer essa operação!" });
       }
 
       const listOfMoviesByCategory = await categoryRepository
