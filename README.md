@@ -41,7 +41,7 @@ $ git clone https://github.com/italobezerraa/softreaming-api
 $ yarn
 
 # Criar uma instância do PostgresSQL usando o Docker
-$  docker run --name softreaming-database -e POSTGRES_PASSWORD=softreaming -p 5432:5432 -d postgres
+$ docker run --name softreaming-database -e POSTGRES_PASSWORD=softreaming -p 5432:5432 -d postgres
 
 # Gerar as migrations
 $ yarn migration:run
